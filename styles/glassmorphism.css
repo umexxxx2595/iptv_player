@@ -1,0 +1,96 @@
+/* ============================================================================
+   FONEX IPTV - GLASSMORPHISM PREMIUM
+   Version: 3.1.0
+   Purpose: Premium glass effects with legacy safe-guards.
+   ============================================================================ */
+
+/* @layer removed for legacy compatibility (2015 webOS) */
+
+/* 1. PREMIUM GLASS - Standard for Modals & HUD */
+.glass-premium {
+    background: #0c0e14; /* Fallback for legacy webOS */
+    background: var(--fonex-bg-glass);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border: 1px solid var(--fonex-border-bright);
+}
+
+/* 2. ULTRA GLASS - For full-screen overlays */
+.glass-ultra {
+    background: #000000;
+    background: rgba(0, 0, 0, 0.96);
+    backdrop-filter: blur(44px) brightness(0.8) contrast(1.2);
+    -webkit-backdrop-filter: blur(44px) brightness(0.8) contrast(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+/* 3. CRYSTAL CARD - Featured content cards */
+.crystal-card {
+    background: #141620; /* Fallback for legacy webOS */
+    background: var(--fonex-bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.055);
+    border-radius: 16px;
+}
+
+.crystal-card.focused {
+    border-color: #00f2ff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* 4. NEURAL GLASS - Tinted active surfaces */
+.glass-neural {
+    background: rgba(0, 242, 255, 0.15);
+    backdrop-filter: blur(20px) saturate(200%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
+    border: 1px solid #00f2ff;
+}
+
+/* 5. HOLOGRAM GLASS - Multi-color gradient */
+.glass-hologram {
+    background: #0c0e14;
+    background: linear-gradient(135deg, rgba(0, 242, 255, 0.1), rgba(139, 92, 246, 0.08));
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* UI Utilities */
+.glass-overlay {
+    background: #000000;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.glass-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.glass-toast {
+    background: #0c0e14;
+    background: var(--fonex-bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    padding: 16px 32px;
+    color: #ffffff;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+}

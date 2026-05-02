@@ -1,0 +1,97 @@
+/* ============================================================================
+   FONEX IPTV - THEME OVERRIDE
+   Version: 3.1.0
+   Purpose: Pure theme variables with legacy fallbacks.
+   ============================================================================ */
+
+/* ──────────────────────────────────────────────────────────────────────────
+   1. DARK THEME (OBSIDIAN)
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root,
+:root[data-theme="fonex-dark"] {
+    color-scheme: dark;
+
+    /* Primary palette */
+    --fonex-bg-pure: #030407;
+    --fonex-bg-deep: #050508;
+    --fonex-bg-main: #080a10;
+    --fonex-bg-surface: #0c0e14;
+    --fonex-bg-elevated: #141620;
+
+    --fonex-primary: #00f2ff;
+    --fonex-primary-rgb: 0, 242, 255;
+    
+    /* Legacy-safe rgba fallbacks */
+    --fonex-primary-soft: rgba(0, 242, 255, 0.15);
+    --fonex-primary-glow: rgba(0, 242, 255, 0.38);
+
+    --fonex-accent: #00f2ff; /* Hardcoded for legacy */
+    --fonex-accent: var(--fonex-primary);
+    
+    --fonex-secondary: #8b5cf6;
+    --fonex-secondary-rgb: 139, 92, 246;
+
+    --fonex-text-primary: #ffffff;
+    --fonex-text-secondary: rgba(255, 255, 255, 0.72);
+    --fonex-text-muted: rgba(255, 255, 255, 0.42);
+    --fonex-text-disabled: rgba(255, 255, 255, 0.22);
+    --fonex-text-inverse: #000000;
+
+    --fonex-bg-card: rgba(255, 255, 255, 0.035);
+    --fonex-bg-glass: rgba(8, 10, 16, 0.88);
+
+    --fonex-border-subtle: rgba(255, 255, 255, 0.055);
+    --fonex-border-default: rgba(255, 255, 255, 0.085);
+    --fonex-border-bright: rgba(255, 255, 255, 0.16);
+    --fonex-border-focused: rgba(0, 242, 255, 0.42);
+
+    /* Semantic */
+    --fonex-success: #32d583;
+    --fonex-danger: #ff4d4f;
+    --fonex-warning: #ffb020;
+    --fonex-info: #38bdf8;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   2. LIGHT THEME (GLACIER)
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root[data-theme="fonex-light"] {
+    color-scheme: light;
+    
+    --fonex-bg-pure: #ffffff;
+    --fonex-bg-deep: #f5f5f5;
+    --fonex-bg-main: #eaeaea;
+    --fonex-bg-surface: #e0e0e0;
+    --fonex-bg-elevated: #d0d0d0;
+    
+    --fonex-text-primary: #000000;
+    --fonex-text-secondary: #222222;
+    --fonex-text-muted: #555555;
+    
+    --fonex-bg-card: rgba(0, 0, 0, 0.05);
+    --fonex-bg-glass: rgba(255, 255, 255, 0.9);
+    --fonex-border-default: rgba(0, 0, 0, 0.1);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   3. NEON THEME (CYBERPUNK)
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root[data-theme="fonex-neon"] {
+    --fonex-primary: #00ffcc;
+    --fonex-primary-rgb: 0, 255, 204;
+    --fonex-secondary: #ff2bd6;
+    --fonex-secondary-rgb: 255, 43, 214;
+
+    --fonex-primary-soft: rgba(0, 255, 204, 0.15);
+    --fonex-primary-glow: rgba(0, 255, 204, 0.38);
+    --fonex-primary-hologram: rgba(0, 255, 204, 0.24);
+
+    --fonex-accent: #00ffcc; /* Hardcoded for legacy */
+    --fonex-accent: var(--fonex-primary);
+    
+    --fonex-secondary-glow: rgba(255, 43, 214, 0.36);
+    --fonex-border-focused: rgba(0, 255, 204, 0.42);
+}

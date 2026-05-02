@@ -1,0 +1,686 @@
+/* ============================================================================
+   FONEX IPTV - STABILIZED COMPONENTS (PHASE P2)
+   Purpose: TV-Grade layout, sidebar alignment, and card consistency.
+   ============================================================================ */
+
+/* @layer removed */
+    :root {
+        --fonex-safe-area-x: 60px;
+        --fonex-safe-area-y: 40px;
+    }
+
+    /* --- 1. COMPACT SIDEBAR --- */
+    #app-shell #main-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: var(--fonex-sidebar-width);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: rgba(5, 5, 10, 0.94);
+        border-right: 1px solid var(--fonex-border-default);
+        z-index: var(--fonex-z-sidebar);
+        overflow: hidden;
+        backdrop-filter: var(--fonex-glass-blur-sm);
+        -webkit-backdrop-filter: var(--fonex-glass-blur-sm);
+    }
+
+    .sidebar-logo {
+        width: 100%;
+        height: 96px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sidebar-mark {
+        font-size: 34px;
+        font-weight: 900;
+        background: linear-gradient(135deg, var(--fonex-primary), var(--fonex-secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 0 14px var(--fonex-primary-glow));
+    }
+
+    .nav-items-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        padding-top: 12px;
+    }
+
+    .nav-item {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--fonex-r-xl);
+        color: var(--fonex-text-muted);
+        background: transparent;
+        border: 1px solid transparent;
+        transition:
+            transform var(--fonex-dur-fast) var(--fonex-ease-wow),
+            background-color var(--fonex-dur-fast) var(--fonex-ease-wow),
+            border-color var(--fonex-dur-fast) var(--fonex-ease-wow),
+            color var(--fonex-dur-fast) var(--fonex-ease-wow),
+            box-shadow var(--fonex-dur-fast) var(--fonex-ease-wow);
+        cursor: pointer;
+    }
+
+    .nav-item i, .nav-item svg {
+        width: 26px;
+        height: 26px;
+    }
+
+    .nav-item.active {
+        color: var(--fonex-primary);
+        background: var(--fonex-accent-soft);
+        border-color: var(--fonex-border-focused);
+        box-shadow: 0 0 20px var(--fonex-primary-soft);
+    }
+
+    .nav-item:focus-visible, .nav-item.focused {
+        outline: none;
+        color: var(--fonex-text-primary);
+        background: var(--fonex-border-default);
+        border-color: var(--fonex-primary);
+        transform: scale(1.1);
+        box-shadow: var(--fonex-shadow-lg), 0 0 15px var(--fonex-primary-soft);
+    }
+
+    .sidebar-footer {
+        margin-top: auto;
+        padding-top-end: 24px;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        color: rgba(255, 255, 255, 0.15);
+        text-transform: uppercase;
+    }
+
+    /* --- 2. MAIN CONTENT AREA --- */
+    #app-shell #main-content {
+        margin-inline-start: var(--fonex-sidebar-width);
+        width: calc(100vw - var(--fonex-sidebar-width));
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background: var(--fonex-bg-deep);
+        scroll-behavior: smooth;
+        position: relative;
+    }
+
+    /* --- 3. HOME SCREEN (STABILIZED) --- */
+    .home-screen {
+        display: flex;
+        flex-direction: column;
+        padding: var(--fonex-safe-area-y) var(--fonex-safe-area-x) 100px;
+        gap: 56px;
+        animation: fonex-fade-in-up var(--fonex-dur-slow) var(--fonex-ease-wow);
+    }
+
+    /* --- 4. HERO SECTION --- */
+    .hero-section {
+        position: relative;
+        min-height: 360px; /* Fallback for legacy webOS */
+        min-height: clamp(360px, 40vh, 500px);
+        border-radius: var(--fonex-radius-3xl);
+        padding: 40px; /* Fallback for legacy webOS */
+        padding: clamp(40px, 4vw, 72px);
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        background-color: var(--fonex-bg-main);
+        background-image:
+            linear-gradient(
+                90deg,
+                rgba(3, 4, 7, 0.96) 0%,
+                rgba(3, 4, 7, 0.62) 42%,
+                rgba(3, 4, 7, 0.05) 100%
+            ),
+            var(--hero-bg-image, none);
+        background-size: cover;
+        background-position: center;
+        border: 1px solid var(--fonex-border-subtle);
+        box-shadow: var(--fonex-shadow-2xl);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 5;
+        max-width: 720px;
+    }
+
+    .system-status {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.25em;
+        color: var(--fonex-primary);
+        margin-bottom: 16px;
+        opacity: 0.9;
+    }
+
+    .hero-content h1 {
+        font-size: 52px; /* Fallback for legacy webOS */
+        font-size: clamp(52px, 4.5vw, 84px);
+        line-height: 1.0;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        color: #ffffff;
+        margin: 0 0 24px 0;
+        text-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-content p {
+        font-size: 18px;
+        line-height: 1.6;
+        color: var(--fonex-text-secondary);
+        margin-bottom: 36px;
+        max-width: 600px;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 16px;
+    }
+
+    .hero-btn {
+        min-width: 190px;
+        height: 68px;
+        border-radius: 999px; /* Fallback */
+        border-radius: var(--fonex-radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-size: 16px;
+        font-weight: 800;
+        border: 1px solid rgba(255, 255, 255, 0.15); /* Fallback */
+        border: 1px solid var(--fonex-border-bright);
+        background: #141620; /* Fallback for legacy webOS */
+        background: var(--fonex-bg-card);
+        color: #ffffff; /* Fallback */
+        color: var(--fonex-text-primary);
+        backdrop-filter: var(--fonex-glass-blur-md);
+        -webkit-backdrop-filter: var(--fonex-glass-blur-md);
+        cursor: pointer;
+        transition:
+            transform var(--fonex-dur-fast) var(--fonex-ease-wow),
+            background-color var(--fonex-dur-fast) var(--fonex-ease-wow),
+            border-color var(--fonex-dur-fast) var(--fonex-ease-wow),
+            color var(--fonex-dur-fast) var(--fonex-ease-wow),
+            box-shadow var(--fonex-dur-fast) var(--fonex-ease-wow);
+    }
+
+    .hero-btn i, .hero-btn svg { width: 22px; height: 22px; }
+
+    .hero-btn[data-action="play-first"] {
+        background: var(--fonex-primary);
+        color: var(--fonex-text-inverse);
+        border: none;
+        box-shadow: 0 10px 30px var(--fonex-primary-soft);
+    }
+
+    .hero-btn:focus-visible, .hero-btn.focused {
+        outline: none;
+        transform: scale(1.08);
+        border-color: var(--fonex-text-primary);
+        box-shadow: 0 0 0 4px var(--fonex-border-bright), var(--fonex-shadow-xl);
+        z-index: 10;
+    }
+
+    .hero-btn[data-action="play-first"]:focus-visible, .hero-btn[data-action="play-first"].focused {
+        background: var(--fonex-text-primary);
+        box-shadow: 0 0 40px var(--fonex-primary-glow);
+    }
+
+    .hero-stats {
+        display: flex;
+        gap: 48px;
+        margin-top: 48px;
+        padding-top: 32px;
+        border-top: 1px solid var(--fonex-border-default);
+    }
+
+    .stat-item strong {
+        display: block;
+        font-size: 26px;
+        font-weight: 900;
+        color: var(--fonex-text-primary);
+        margin-block-end: 4px;
+    }
+
+    .stat-item span {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--fonex-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+    }
+
+    /* --- 5. CONTENT ROWS --- */
+    .home-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+    }
+
+    .content-row {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .row-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        padding-left-start: 4px;
+    }
+
+    .row-header h2 {
+        font-size: 24px;
+        font-weight: 850;
+        color: var(--fonex-text-primary);
+        margin: 0;
+        letter-spacing: -0.01em;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .row-header h2::before {
+        content: "";
+        width: 4px;
+        height: 24px;
+        background: linear-gradient(to bottom, var(--fonex-primary), var(--fonex-secondary));
+        border-radius: var(--fonex-radius-xs);
+    }
+
+    .row-header span {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--fonex-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+    }
+
+    .row-scroll-container {
+        display: flex;
+        gap: 28px;
+        overflow-x: auto;
+        overflow-y: visible;
+        padding: 18px 8px 48px;
+        scrollbar-width: none;
+        scroll-behavior: smooth;
+        margin-inline-end: calc(-1 * var(--fonex-safe-area-x));
+    }
+
+    .row-scroll-container::-webkit-scrollbar { display: none; }
+
+    /* --- 6. POSTER CARDS --- */
+    .poster-card {
+        flex: 0 0 320px;
+        width: 320px;
+        height: 180px;
+        border-radius: var(--fonex-radius-2xl);
+        background: var(--fonex-bg-surface);
+        border: 1px solid var(--fonex-border-default);
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        transition:
+            transform 0.35s var(--fonex-ease-smooth),
+            border-color 0.25s var(--fonex-ease-smooth),
+            box-shadow 0.25s var(--fonex-ease-smooth);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        outline: none;
+    }
+
+    .poster-card.focusable:focus-visible,
+    .poster-card.focused {
+        outline: none;
+        transform: scale(1.065) translateY(-8px);
+        border-color: var(--fonex-primary);
+        box-shadow:
+            0 0 0 4px var(--fonex-accent-soft),
+            var(--fonex-shadow-2xl);
+        z-index: 100;
+    }
+
+    .card-media {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    .card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s var(--fonex-ease-smooth);
+    }
+
+    .poster-card.focusable:focus-visible img,
+    .poster-card.focused img {
+        transform: scale(1.06);
+    }
+
+    .card-media::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
+    }
+
+    .card-badge {
+        position: absolute;
+        top: 16px;
+        inset-inline-end: 16px;
+        padding: 6px 12px;
+        background: var(--fonex-accent-soft);
+        border: 1px solid var(--fonex-border-subtle);
+        color: var(--fonex-primary);
+        font-size: 10px;
+        font-weight: 900;
+        border-radius: var(--fonex-r-sm);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        backdrop-filter: var(--fonex-glass-blur-sm);
+        -webkit-backdrop-filter: var(--fonex-glass-blur-sm);
+        z-index: 3;
+    }
+
+    .card-info {
+        position: absolute;
+        inset-inline: 20px;
+        inset-block-end: 20px;
+        z-index: 5;
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: 850;
+        color: var(--fonex-text-primary);
+        margin-block-end: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .card-subtitle {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--fonex-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .poster-card.is-fallback {
+        background:
+            radial-gradient(circle at center, var(--fonex-primary-soft), transparent 55%),
+            var(--fonex-bg-surface);
+    }
+ 
+    .poster-card.is-fallback .card-media img {
+        object-fit: contain;
+        padding: 36px;
+        opacity: 0.6;
+    }
+
+    /* --- 7. PLAYER OVERLAY (CONSOLIDATED) --- */
+    #player-overlay {
+        position: fixed;
+        inset: 0;
+        background: var(--fonex-bg-pure);
+        z-index: var(--fonex-z-player);
+        display: flex;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition:
+            opacity 0.35s var(--fonex-ease-smooth),
+            visibility 0s linear 0.35s;
+    }
+ 
+    #player-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transition:
+            opacity 0.35s var(--fonex-ease-smooth),
+            visibility 0s linear 0s;
+    }
+
+    .player-video {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        z-index: 1 !important;
+        opacity: 0;
+        background: #000;
+        transform: translateZ(0);
+        transition: opacity 0.3s var(--fonex-ease-smooth);
+    }
+
+    .player-video.ready {
+        opacity: 1 !important;
+    }
+
+    .player-hud {
+        position: absolute !important;
+        inset: 0 !important;
+        z-index: 10 !important;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        pointer-events: none;
+        transition:
+            opacity 0.25s var(--fonex-ease-smooth),
+            visibility 0s linear 0s;
+    }
+
+    .player-hud.hud-hidden {
+        opacity: 0;
+        visibility: hidden;
+        transition:
+            opacity 0.25s var(--fonex-ease-smooth),
+            visibility 0s linear 0.25s;
+    }
+
+    .hud-top, .hud-bottom {
+        pointer-events: auto;
+    }
+
+    .player-controls {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 16px 32px;
+        background: var(--fonex-bg-glass);
+        backdrop-filter: var(--fonex-glass-blur-md);
+        -webkit-backdrop-filter: var(--fonex-glass-blur-md);
+        border-radius: var(--fonex-radius-full);
+        border: 1px solid var(--fonex-border-bright);
+    }
+
+    .action-btn {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--fonex-bg-card);
+        border: 1px solid transparent;
+        color: var(--fonex-text-primary);
+        cursor: pointer;
+        transition:
+            transform var(--fonex-dur-fast) var(--fonex-ease-wow),
+            background-color var(--fonex-dur-fast) var(--fonex-ease-wow),
+            border-color var(--fonex-dur-fast) var(--fonex-ease-wow),
+            color var(--fonex-dur-fast) var(--fonex-ease-wow),
+            box-shadow var(--fonex-dur-fast) var(--fonex-ease-wow);
+    }
+
+    .action-btn:focus-visible,
+    .action-btn.focused {
+        outline: none;
+        background: var(--fonex-text-primary);
+        color: var(--fonex-text-inverse);
+        transform: scale(1.15);
+    }
+
+    /* --- 8. PLAYER UI OVERLAYS (Loader, Error, Buffering, Preview) --- */
+    .player-loader, .player-buffering, .player-error, .player-preview {
+        position: absolute;
+        inset: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--fonex-bg-pure);
+        transition: opacity 0.4s var(--fonex-ease-smooth), visibility 0.4s;
+    }
+
+    .player-buffering {
+        background: rgba(0,0,0,0.4);
+        backdrop-filter: var(--fonex-glass-blur-sm);
+        -webkit-backdrop-filter: var(--fonex-glass-blur-sm);
+        z-index: 15;
+    }
+
+    .player-loader-pill {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding: 24px 40px;
+        background: var(--fonex-bg-glass);
+        backdrop-filter: var(--fonex-glass-blur-lg);
+        -webkit-backdrop-filter: var(--fonex-glass-blur-lg);
+        border-radius: var(--fonex-radius-2xl);
+        border: 1px solid var(--fonex-border-bright);
+        box-shadow: var(--fonex-shadow-2xl);
+    }
+
+    .loader-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .loader-copy strong {
+        font-size: 20px;
+        font-weight: 850;
+        color: var(--fonex-text-primary);
+    }
+
+    .loader-copy span {
+        font-size: 14px;
+        color: var(--fonex-text-muted);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .player-error {
+        background: radial-gradient(circle at center, rgba(var(--fonex-error-rgb), 0.15), var(--fonex-bg-deep));
+    }
+
+    .error-content {
+        text-align: center;
+        max-width: 600px;
+        padding: 48px;
+    }
+
+    .error-content i {
+        font-size: 64px;
+        color: var(--fonex-error);
+        margin-block-end: 24px;
+    }
+
+    .error-message {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--fonex-text-primary);
+        margin-block-end: 32px;
+        line-height: 1.4;
+    }
+
+    .error-actions {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+    }
+
+    .retry-btn {
+        padding: 14px 28px;
+        border-radius: var(--fonex-radius-lg);
+        font-weight: 800;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        background: var(--fonex-bg-surface);
+        border: 1px solid var(--fonex-border-default);
+        color: var(--fonex-text-primary);
+        transition: all 0.25s var(--fonex-ease-smooth);
+    }
+
+    .retry-btn.primary {
+        background: var(--fonex-primary);
+        border-color: var(--fonex-primary);
+        color: var(--fonex-text-inverse);
+    }
+
+    .retry-btn.focused {
+        transform: scale(1.1);
+        border-color: var(--fonex-primary);
+        box-shadow: 0 0 20px rgba(var(--fonex-primary-rgb), 0.3);
+    }
+
+    .player-preview {
+        background: var(--fonex-bg-deep);
+        z-index: 5; /* Behind loader but above video */
+    }
+
+    .preview-content {
+        text-align: center;
+    }
+
+    .preview-logo {
+        max-height: 180px;
+        margin-block-end: 24px;
+        filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+    }
+
+    .preview-name {
+        font-size: 48px;
+        font-weight: 900;
+        color: var(--fonex-text-primary);
+        margin-block-end: 8px;
+    }
+
+    .preview-group {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--fonex-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+    }
+
+    .hidden {
+        display: none !important;
+        opacity: 0;
+        visibility: hidden;
+    }
+/* layer end */

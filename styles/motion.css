@@ -1,0 +1,145 @@
+/* ============================================================================
+   FONEX IPTV - MOTION CSS (TV-SAFE)
+   Version: 3.1.0
+   Purpose: Performance-optimized animations for webOS TV.
+   ============================================================================ */
+
+/* @layer removed for legacy compatibility */
+
+:root {
+    --fonex-motion-scale: 1;
+}
+
+/* webOS TV Performance Adjustment */
+.webos-tv {
+    --fonex-motion-scale: 0.75;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --fonex-motion-scale: 0;
+    }
+}
+
+/* 1. INTERACTIVE TRANSITIONS */
+.focusable, .nav-item, .poster-card, .hero-btn, .action-btn {
+    /* Transition Fallback for legacy webOS */
+    transition: transform 0.2s, background 0.2s, box-shadow 0.2s, opacity 0.2s;
+    transition: 
+        transform calc(var(--fonex-dur-fast) * var(--fonex-motion-scale)) var(--fonex-ease-wow),
+        background calc(var(--fonex-dur-fast) * var(--fonex-motion-scale)) var(--fonex-ease-wow),
+        box-shadow calc(var(--fonex-dur-fast) * var(--fonex-motion-scale)) var(--fonex-ease-wow),
+        opacity calc(var(--fonex-dur-fast) * var(--fonex-motion-scale)) var(--fonex-ease-wow);
+    will-change: transform;
+}
+
+/* 2. FOCUS FEEDBACK (TV-SAFE) */
+@keyframes fonex-focus-glow-pulse {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.08); }
+}
+
+.focusable.focused, .nav-item.focused, .poster-card.focused {
+    /* On TV, we use a single burst or subtle pulse */
+    animation: fonex-focus-glow-pulse 0.3s ease-out 1; /* Fallback */
+    animation: fonex-focus-glow-pulse calc(0.35s * var(--fonex-motion-scale)) ease-out 1;
+}
+
+/* 3. ENTRANCE ANIMATIONS */
+@keyframes fonex-fade-in-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.screen-fade-in {
+    animation: fonex-fade-in-up 0.5s ease-out forwards; /* Fallback */
+    animation: fonex-fade-in-up calc(var(--fonex-dur-slow) * var(--fonex-motion-scale)) var(--fonex-ease-wow) forwards;
+}
+
+/* 4. LOADING SKELETON (Always Safe) */
+@keyframes fonex-skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-shimmer {
+    background: #121218; /* Fallback */
+    background: linear-gradient(90deg, 
+        var(--fonex-bg-surface) 25%, 
+        var(--fonex-bg-elevated) 50%, 
+        var(--fonex-bg-surface) 75%);
+    background-size: 200% 100%;
+    animation: fonex-skeleton-shimmer 1.5s linear infinite;
+}
+
+/* 5. TOAST TRANSITIONS */
+.toast-enter {
+    animation: fonex-fade-in-up 0.2s ease-out forwards; /* Fallback */
+    animation: fonex-fade-in-up calc(var(--fonex-dur-fast) * var(--fonex-motion-scale)) var(--fonex-ease-wow) forwards;
+}
+
+/* 6. GLOBAL KEYFRAMES */
+@keyframes fonex-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fonex-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes fonex-slide-in-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fonex-slide-out-down {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(30px); }
+}
+
+@keyframes fonex-holographic-pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+@keyframes fonex-glass-pulse {
+    0%, 100% { box-shadow: 0 8px 32px rgba(0,0,0,0.3); } /* Fallback */
+    50% { box-shadow: 0 16px 48px rgba(0,0,0,0.4); } /* Fallback */
+}
+
+@keyframes fonex-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fonex-ping {
+    75%, 100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes fonex-bounce {
+    0%, 100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+/* 7. GPU ACCELERATION HELPER */
+.gpu-accel {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Reduced Motion Overrides */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-delay: 0s !important;
+        animation-duration: 0s !important;
+        transition-duration: 0s !important;
+    }
+}

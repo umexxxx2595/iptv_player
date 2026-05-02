@@ -1,0 +1,666 @@
+/*======================================================================
+ * LEGEND TV – QUANTUM COMPONENT SYSTEM (v2026.2)
+ * -------------------------------------------------------------------
+ *  • Isolated navigation & settings hierarchy
+ *  • LG WebOS‑TV hardware optimisation
+ *  • CSS Layers → reset → base → components → animations → responsive
+ *  • Logical properties, container‑queries & `@property` for smoothness
+ *  • Full focus‑visible support, reduced‑motion & high‑contrast fall‑backs
+ *====================================================================*/
+
+/* --------------------------------------------------------------------
+   1️⃣  LAYERS
+   -------------------------------------------------------------------- */
+@layer reset, base, components, animations, responsive;
+
+/* --------------------------------------------------------------------
+   2️⃣  RESET (layer: reset)
+   -------------------------------------------------------------------- */
+@layer reset {
+
+    .nav-item,
+    .account-action-btn {
+        all: unset;
+        /* isolate component from inherited UI */
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        position: relative;
+        isolation: isolate;
+        transition: var(--v-dur-mid) var(--v-ease-wow);
+        will-change: transform, opacity, background;
+    }
+}
+
+/* --------------------------------------------------------------------
+   3️⃣  COMPONENTS (layer: components)
+   -------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------
+   3.1  QUANTUM NAVIGATION – sidebar items
+   -------------------------------------------------------------- */
+.nav-item {
+    height: 70px;
+    /* default – overridden per‑breakpoint */
+    padding-inline-start: 30px;
+    width: 100%;
+    background: transparent;
+    color: var(--v-text-muted);
+    opacity: .7;
+}
+
+/* “active bar” on the left edge */
+.nav-item::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 0;
+    background: var(--v-accent);
+    border-start-end-radius: var(--v-r-xs);
+    border-end-end-radius: var(--v-r-xs);
+    transition: height var(--v-dur-mid) var(--v-ease-wow);
+}
+
+/* icon */
+.nav-item i {
+    font-size: 24px;
+    min-inline-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* text (collapsed by default) */
+.nav-text {
+    margin-inline-start: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: var(--v-dur-mid) var(--v-ease-wow);
+}
+
+/* hover / focus‑within on the *sidebar* reveals the text */
+#main-sidebar:hover .nav-text,
+#main-sidebar:focus-within .nav-text {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* -----------------------------------------------------------------
+   Hover / Focus states
+   ----------------------------------------------------------------- */
+.nav-item:hover {
+    opacity: 1;
+    color: var(--v-text-head);
+    background: rgba(255, 255, 255, .04);
+    transform: translateX(4px);
+}
+
+.nav-item:hover i {
+    color: var(--v-accent);
+    transform: scale(1.1);
+}
+
+.nav-item:focus-visible {
+    opacity: 1;
+    color: var(--v-accent);
+    background: rgba(var(--v-accent-rgb), .08);
+    outline: 2px solid var(--v-accent);
+    outline-offset: -2px;
+    transform: scale(1.02);
+}
+
+/* Active (current page) */
+.nav-item.active {
+    opacity: 1;
+    color: var(--v-text-head);
+    background: rgba(255, 255, 255, .06);
+}
+
+.nav-item.active::before {
+    height: 28px;
+    box-shadow: 0 0 20px var(--v-accent-glow);
+}
+
+.nav-item.active i {
+    color: var(--v-accent);
+}
+
+/* Magic‑remote extra focus – a little bigger & a halo */
+.magic-remote-focus .nav-item:focus-visible {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 3px var(--v-accent);
+}
+
+/* -----------------------------------------------------------------
+   3.2  SETTINGS SCREEN – container
+   ----------------------------------------------------------------- */
+#settings-screen {
+    margin-inline-start: var(--v-sidebar-w);
+    padding: var(--v-content-pad);
+    width: calc(100% - var(--v-sidebar-w));
+    min-block-size: 100vh;
+    background: var(--v-bg-deep);
+    transition: margin-inline-start var(--v-dur-mid) var(--v-ease-wow);
+}
+
+/* Sidebar expanded (hover/focus) – fluid width transition */
+#main-sidebar:hover~#settings-screen,
+#main-sidebar:focus-within~#settings-screen {
+    margin-inline-start: var(--v-sidebar-exp);
+    width: calc(100% - var(--v-sidebar-exp));
+}
+
+/* -----------------------------------------------------------------
+   3.3  PROFILE CARD (glass‑morphism)
+   ----------------------------------------------------------------- */
+.profile-card {
+    background: var(--v-bg-card);
+    border: 1px solid var(--v-border);
+    border-radius: var(--v-r-xl);
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    max-width: 1000px;
+    width: 100%;
+    backdrop-filter: var(--glass-blur-md);
+    -webkit-backdrop-filter: var(--glass-blur-md);
+    transition: var(--v-dur-mid) var(--v-ease-wow);
+}
+
+.profile-card:hover {
+    border-color: var(--v-border-bright);
+    transform: translateY(-2px);
+    box-shadow: var(--v-shadow-md);
+}
+
+/* -----------------------------------------------------------------
+   3.4  PROFILE AVATAR (holographic)
+   ----------------------------------------------------------------- */
+.profile-avatar {
+    inline-size: 150px;
+    block-size: 150px;
+    border-radius: 50%;
+    border: 4px solid var(--v-accent);
+    background: var(--v-bg-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    box-shadow: 0 0 30px var(--v-accent-glow);
+    position: relative;
+    overflow: hidden;
+    transition: var(--v-dur-mid) var(--v-ease-wow);
+}
+
+.profile-avatar::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg,
+            var(--v-accent),
+            var(--v-secondary),
+            var(--v-accent));
+    border-radius: 50%;
+    animation: holographicPulse 3s ease-in-out infinite;
+    z-index: -1;
+    opacity: .3;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 50px var(--v-accent-glow);
+}
+
+/* -----------------------------------------------------------------
+   3.5  SETTINGS GRID (account actions)
+   ----------------------------------------------------------------- */
+.account-actions-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    max-width: 1000px;
+    width: 100%;
+}
+
+/* -----------------------------------------------------------------
+   3.6  ACCOUNT ACTION BUTTONS
+   ----------------------------------------------------------------- */
+.account-action-btn {
+    height: 90px;
+    background: var(--v-bg-surface);
+    border-radius: var(--v-r-lg);
+    padding-inline: 30px;
+    gap: 20px;
+    color: var(--v-text-body);
+    border: 1px solid transparent;
+    overflow: hidden;
+    transition: var(--v-dur-mid) var(--v-ease-wow);
+}
+
+/* subtle animated gradient overlay */
+.account-action-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg,
+            rgba(var(--v-accent-rgb), .05),
+            rgba(var(--v-secondary-rgb), .03),
+            rgba(var(--v-accent-rgb), .02));
+    opacity: 0;
+    transition: opacity var(--v-dur-mid) var(--v-ease-wow);
+}
+
+/* hover state */
+.account-action-btn:hover {
+    background: var(--v-bg-card);
+    border-color: var(--v-border-bright);
+    transform: translateY(-2px);
+    box-shadow: var(--v-shadow-sm);
+}
+
+.account-action-btn:hover::before {
+    opacity: 1;
+}
+
+/* focus‑visible (keyboard / remote) */
+.account-action-btn:focus-visible {
+    background: rgba(var(--v-accent-rgb), .1);
+    border: 2px solid var(--v-accent);
+    transform: translateY(-3px);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--v-accent-soft);
+}
+
+/* icon */
+.account-action-btn i {
+    font-size: 24px;
+    color: var(--v-accent);
+    transition: transform var(--v-dur-mid) var(--v-ease-wow);
+}
+
+.account-action-btn:hover i {
+    transform: scale(1.1);
+}
+
+/* text blocks */
+.account-action-btn .btn-text {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.account-action-btn .btn-description {
+    font-size: 12px;
+    color: var(--v-text-muted);
+    margin-block-start: 4px;
+    opacity: .8;
+}
+
+/* -----------------------------------------------------------------
+   3.7  LOADING STATES
+   ----------------------------------------------------------------- */
+.nav-item.loading,
+.account-action-btn.loading {
+    opacity: .6;
+    pointer-events: none;
+}
+
+.nav-item.loading::after,
+.account-action-btn.loading::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: 20px;
+    /* nav‑item */
+    inset-inline-end: 30px;
+    /* btn (overwrites above) */
+    inline-size: 16px;
+    block-size: 16px;
+    border: 2px solid transparent;
+    border-top-color: var(--v-accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* --------------------------------------------------------------------
+   4️⃣  ANIMATION KEYFRAMES (layer: animations)
+   -------------------------------------------------------------------- */
+@layer animations {
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes holographicPulse {
+
+        0%,
+        100% {
+            opacity: .3;
+        }
+
+        50% {
+            opacity: .6;
+        }
+    }
+
+    /* optional hue‑shift version – not used yet but ready for future */
+    @keyframes holographicShift {
+
+        0%,
+        100% {
+            opacity: .3;
+            filter: hue-rotate(0deg);
+        }
+
+        50% {
+            opacity: .6;
+            filter: hue-rotate(45deg);
+        }
+    }
+}
+
+/* --------------------------------------------------------------------
+   5️⃣  RESPONSIVE & TV‑SPECIFIC (layer: responsive)
+   -------------------------------------------------------------------- */
+@layer responsive {
+
+    /* ----------------------------------------------------------------
+     5.1  Touch‑only remote (no hover) – larger tap‑targets
+     ---------------------------------------------------------------- */
+    @media (hover: none) {
+        .nav-item {
+            min-block-size: 80px;
+            padding-block: 20px;
+            padding-inline-start: 30px;
+        }
+
+        .nav-item:active {
+            background: rgba(255, 255, 255, .1);
+            transform: scale(.98);
+        }
+
+        .account-action-btn {
+            min-block-size: 100px;
+            padding-inline: 40px;
+        }
+
+        .account-action-btn:active {
+            transform: scale(.98);
+        }
+    }
+
+    /* ----------------------------------------------------------------
+     5.2  4K TV – larger UI for 3840 px+ screens
+     ---------------------------------------------------------------- */
+    @media (min-width:3840px) {
+        .nav-item {
+            block-size: 100px;
+            padding-inline-start: 40px;
+        }
+
+        .nav-item i {
+            font-size: 32px;
+        }
+
+        .nav-text {
+            font-size: 16px;
+            margin-inline-start: 30px;
+        }
+
+        #settings-screen {
+            padding: 80px;
+        }
+
+        .profile-card {
+            padding: 60px;
+            gap: 60px;
+        }
+
+        .profile-avatar {
+            inline-size: 200px;
+            block-size: 200px;
+            font-size: 5rem;
+        }
+
+        .account-action-btn {
+            block-size: 120px;
+            padding-inline: 40px;
+        }
+    }
+
+    /* ----------------------------------------------------------------
+     5.3  Reduced‑motion & High‑contrast (system preferences)
+     ---------------------------------------------------------------- */
+    @media (prefers-reduced-motion: reduce) {
+
+        .nav-item,
+        .nav-text,
+        .profile-card,
+        .account-action-btn {
+            transition: none;
+        }
+
+        .nav-item:hover,
+        .account-action-btn:hover {
+            transform: none;
+        }
+    }
+
+    @media (prefers-contrast: high) {
+        .nav-item {
+            border: 1px solid transparent;
+        }
+
+        .nav-item.active {
+            border-color: var(--v-accent);
+        }
+
+        .profile-card {
+            border: 2px solid var(--v-accent);
+        }
+
+        .account-action-btn {
+            border: 2px solid var(--v-border);
+        }
+    }
+}
+
+/* --------------------------------------------------------------------
+   6️⃣  UTILITIES (optional – can be imported from base.css)
+   -------------------------------------------------------------------- */
+.u-focus-visible {
+    outline: 2px solid var(--v-accent);
+    outline-offset: 3px;
+}
+
+
+/* --------------------------------------------------------------------
+   7️⃣  PLAYER HUD - PREMIUM TV DESIGN
+   -------------------------------------------------------------------- */
+
+.player-signal-row {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+
+    padding-inline: 0;
+}
+
+#player-overlay .player-progress {
+    width: 100%;
+    height: 3px;
+    block-size: 3px;
+
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+
+    overflow: hidden;
+}
+
+#player-overlay .player-progress-fill {
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        rgba(0, 242, 255, 0.65),
+        rgba(255, 255, 255, 0.26)
+    );
+
+    opacity: 0.62;
+}
+
+#player-overlay .live-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    min-width: 72px;
+    height: 34px;
+    padding: 0 12px;
+
+    border-radius: 999px;
+
+    background: rgba(255, 0, 72, 0.14);
+    border: 1px solid rgba(255, 0, 72, 0.28);
+
+    color: #ff5a84;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+#player-overlay .live-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 999px;
+    background: #ff4778;
+
+    box-shadow: 0 0 12px rgba(255, 71, 120, 0.85);
+}
+
+#player-overlay .player-controls {
+    align-self: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 8px 12px;
+
+    border-radius: 999px;
+
+    background: rgba(8, 10, 14, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    box-shadow:
+        0 18px 48px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+#player-overlay .action-btn {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    min-height: 54px;
+
+    border-radius: 999px;
+
+    color: rgba(255, 255, 255, 0.82);
+    background: rgba(255, 255, 255, 0.075);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    transform: translateZ(0);
+    transition:
+        transform 150ms ease,
+        border-color 150ms ease,
+        background 150ms ease,
+        box-shadow 150ms ease;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#player-overlay .action-btn svg,
+#player-overlay .action-btn i {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#player-overlay .action-btn:hover,
+#player-overlay .action-btn:focus,
+#player-overlay .action-btn.focused {
+    outline: none;
+
+    transform: scale(1.075);
+
+    color: #ffffff;
+    background: rgba(0, 242, 255, 0.13);
+    border-color: rgba(0, 242, 255, 0.78);
+
+    box-shadow:
+        0 0 0 2px rgba(0, 242, 255, 0.20),
+        0 0 24px rgba(0, 242, 255, 0.24);
+}
+
+#player-overlay .action-btn.play-pause {
+    width: 66px;
+    height: 66px;
+    min-width: 66px;
+    min-height: 66px;
+
+    background: rgba(0, 242, 255, 0.16);
+    border-color: rgba(0, 242, 255, 0.62);
+
+    box-shadow:
+        0 0 0 1px rgba(0, 242, 255, 0.22),
+        0 12px 34px rgba(0, 242, 255, 0.18);
+}
+
+/* --------------------------------------------------------------------
+   8️⃣  PLAYER SAFETY LOCK (disable blur on TV hardware)
+   -------------------------------------------------------------------- */
+#player-overlay .glass-ultra,
+#player-overlay .glass-premium,
+#player-overlay .player-hud,
+#player-overlay .player-controls {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+}
+
+/* --------------------------------------------------------------------
+   9️⃣  END OF FILE
+   -------------------------------------------------------------------- */

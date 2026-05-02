@@ -1,0 +1,1060 @@
+/*****************************************************************************************
+ *  FONTEX THEME – LEGEND SUPREME NAVIGATION (v2026.3)
+ *
+ *   ── 0️⃣  GLOBAL LAYERS & RESets
+ *   ── 1️⃣  ROOT – Design Tokens (overrides for v2026)
+ *   ── 2️⃣  GLOBAL UTILS (utils, helpers, utilities)
+ *   ── 3️⃣  SIDEBAR – Holographic, expandable, TV‑ready
+ *   ── 4️⃣  NAV‑ITEMS – Interaction, focus, loading, state
+ *   ── 5️⃣  MAIN CONTENT – Adaptive layout, container‑queries
+ *   ── 6️⃣  FOOTER – Minimalist, expandable
+ *   ── 7️⃣  STATE‑INDICATORS (loading, disabled, error)
+ *   ── 8️⃣  ANIMATIONS & KEYFRAMES
+ *   ── 9️⃣  MEDIA QUERIES (touch, remote, 4K/8K, high‑contrast, reduced‑motion)
+ *  🔟  FALLBACKS & POLYFILLS
+ *
+ *  All sections are separated by **CSS Layers** for deterministic cascade.
+ *****************************************************************************************/
+
+/*======================================================================
+ * 0️⃣  LAYERS – ordered for maximum predictability
+ *====================================================================*/
+@layer reset, tokens, utils, sidebar, nav, content, footer, state, motion, responsive, fallback;
+
+/*======================================================================
+ * 1️⃣  RESET – absolute clean‑slate (layer: reset)
+ *====================================================================*/
+@layer reset {
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+    }
+
+    /* Focus‑visible – all focusable widgets are styled uniformly */
+    *:focus-visible {
+        outline: 2px solid var(--v-accent, #00F2FF);
+        outline-offset: 2px;
+        border-radius: var(--v-r-sm, 8px);
+    }
+
+    html,
+    body {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        font-size: var(--v-root-font, clamp(0.9375rem, 0.75vw + 0.5rem, 1rem));
+        line-height: var(--v-line-height, 1.6);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: var(--v-bg-pure, #050508);
+        color: var(--v-text-head, #FFFFFF);
+        font-family: var(--v-font-stack, "Inter", -apple-system, BlinkMacSystemFont, "Outfit", sans-serif);
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+        text-rendering: optimizeLegibility;
+    }
+}
+
+/*======================================================================
+ * 2️⃣  ROOT – Design Tokens (layer: tokens)
+ *====================================================================*/
+@layer tokens {
+    :root {
+        /* ------------------------------------------------------------------
+       Core Palette
+       ----------------------------------------------------------------- */
+        --v-bg-pure: #050508;
+        --v-bg-deep: #0A0A0F;
+        --v-bg-main: #0A0A0F;
+        --v-bg-surface: #121218;
+        --v-bg-card: rgba(255, 255, 255, .03);
+        --v-bg-glass: rgba(10, 10, 15, .92);
+        --v-accent: #00F2FF;
+        /* primary hue */
+        --v-accent-rgb: 0, 242, 255;
+        --v-accent-soft: rgba(0, 242, 255, .15);
+        --v-accent-glow: rgba(0, 242, 255, .4);
+        --v-accent-holo: rgba(0, 242, 255, .25);
+        --v-secondary: #8B5CF6;
+        --v-secondary-rgb: 139, 92, 246;
+        --v-secondary-glow: rgba(139, 92, 246, .4);
+        --v-tertiary: #7000FF;
+        --v-red: #FF3B30;
+        --v-green: #34C759;
+        --v-gold: #FFD700;
+        --v-orange: #FF9500;
+        --v-purple: #BF5AF2;
+
+        /* ------------------------------------------------------------------
+       Typography
+       ----------------------------------------------------------------- */
+        --v-font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Outfit", sans-serif;
+        --v-text-head: #FFFFFF;
+        --v-text-body: #B2B2C3;
+        --v-text-muted: #6E6E82;
+        --v-text-disabled: #4A4A5F;
+        --v-text-accent: var(--v-accent);
+        --v-bold-weight: 700;
+        --v-heading-weight: 900;
+
+        /* ------------------------------------------------------------------
+       Layout Geometry
+       ----------------------------------------------------------------- */
+        --v-sidebar-closed: 90px;
+        --v-sidebar-open: 280px;
+        --v-header-h: 80px;
+        --v-content-pad: clamp(40px, 6vw, 120px);
+        --v-grid-gap: 24px;
+        --v-section-gap: 80px;
+
+        /* ------------------------------------------------------------------
+       Border Radius tokens
+       ----------------------------------------------------------------- */
+        --v-r-xs: 6px;
+        --v-r-sm: 10px;
+        --v-r-md: 14px;
+        --v-r-lg: 18px;
+        --v-r-xl: 24px;
+        --v-r-pill: 999px;
+
+        /* ------------------------------------------------------------------
+       Z‑Index System – keep this in sync with base.css
+       ----------------------------------------------------------------- */
+        --z-ambient: -100;
+        --z-noise: -50;
+        --z-deep: -10;
+        --z-base: 1;
+        --z-card: 10;
+        --z-overlay: 100;
+        --z-sidebar: 1000;
+        --z-loader: 15000;
+        --z-toast: 20000;
+        --z-modal: 30000;
+        --z-max: 2147483647;
+
+        /* ------------------------------------------------------------------
+       Motion & Easing
+       ----------------------------------------------------------------- */
+        --v-dur-instant: .1s;
+        --v-dur-fast: .2s;
+        --v-dur-mid: .4s;
+        --v-dur-slow: .6s;
+        --v-ease-apple: cubic-bezier(.2, 1, .2, 1);
+        --v-ease-wow: cubic-bezier(.16, 1, .3, 1);
+        --v-ease-bounce: cubic-bezier(.68, -.55, .27, 1.55);
+        --v-ease-elastic: cubic-bezier(.68, -.6, .32, 1.6);
+        --v-ease-quantum: cubic-bezier(.34, 1.56, .64, 1);
+
+        /* ------------------------------------------------------------------
+       Glass‑Morphism Tokens
+       ----------------------------------------------------------------- */
+        --glass-light: rgba(255, 255, 255, .1);
+        --glass-medium: rgba(255, 255, 255, .15);
+        --glass-heavy: rgba(255, 255, 255, .2);
+        --glass-blur-sm: blur(20px);
+        --glass-blur-md: blur(40px);
+        --glass-blur-lg: blur(60px);
+        --glass-blur-xl: blur(80px);
+
+        /* ------------------------------------------------------------------
+       Shadows
+       ----------------------------------------------------------------- */
+        --v-shadow-sm: 0 2px 12px rgba(0, 0, 0, .2);
+        --v-shadow-md: 0 8px 32px rgba(0, 0, 0, .3);
+        --v-shadow-lg: 0 16px 48px rgba(0, 0, 0, .4);
+        --v-shadow-xl: 0 24px 64px rgba(0, 0, 0, .5);
+        --v-shadow-accent: 0 0 40px var(--v-accent-glow);
+        --v-shadow-secondary: 0 0 40px var(--v-secondary-glow);
+    }
+
+    /* ------------------------------------------------------------------
+     Fallback for browsers that don’t understand `rgba(var(--v-accent-rgb),…)`
+     ----------------------------------------------------------------- */
+    @supports not (rgba(var(--v-accent-rgb), .1)) {
+        :root {
+            --v-accent-rgb: 0, 242, 255;
+        }
+    }
+}
+
+/*======================================================================
+ * 3️⃣  GLOBAL UTILITIES – Helpers & Utility‑First (layer: utils)
+ *====================================================================*/
+@layer utils {
+
+    /* --------------------------------------------------------------
+     Visibility helpers
+     ------------------------------------------------------------ */
+    .u-hidden {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    .u-visible {
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    .u-collapsed {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* --------------------------------------------------------------
+     Position helpers (logical properties)
+     ------------------------------------------------------------ */
+    .u-fixed {
+        position: fixed;
+        inset: 0;
+    }
+
+    .u-absolute {
+        position: absolute;
+        inset: auto;
+    }
+
+    .u-sticky {
+        position: sticky;
+        inset: auto;
+    }
+
+    /* --------------------------------------------------------------
+     Flexbox grid system
+     ------------------------------------------------------------ */
+    .u-flex {
+        display: flex;
+    }
+
+    .u-flex-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .u-flex-between {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .u-flex-col {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .u-flex-wrap {
+        flex-wrap: wrap;
+    }
+
+    .u-gap-sm {
+        gap: 8px;
+    }
+
+    .u-gap-md {
+        gap: var(--v-grid-gap);
+    }
+
+    .u-gap-lg {
+        gap: calc(var(--v-grid-gap) * 1.5);
+    }
+
+    /* --------------------------------------------------------------
+     Sizing helpers – logical properties
+     ------------------------------------------------------------ */
+    .u-w-full {
+        inline-size: 100%;
+    }
+
+    .u-h-full {
+        block-size: 100%;
+    }
+
+    .u-w-100 {
+        inline-size: 100px;
+    }
+
+    .u-h-100 {
+        block-size: 100px;
+    }
+
+    .u-max-w-1000 {
+        max-inline-size: 1000px;
+    }
+
+    /* --------------------------------------------------------------
+     Text utilities
+     ------------------------------------------------------------ */
+    .u-text-head {
+        color: var(--v-text-head);
+    }
+
+    .u-text-body {
+        color: var(--v-text-body);
+    }
+
+    .u-text-muted {
+        color: var(--v-text-muted);
+    }
+
+    .u-text-accent {
+        color: var(--v-accent);
+    }
+
+    .u-font-bold {
+        font-weight: var(--v-bold-weight);
+    }
+
+    .u-uppercase {
+        text-transform: uppercase;
+    }
+
+    .u-truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* --------------------------------------------------------------
+     Glass utilities (pre‑defined blur levels)
+     ------------------------------------------------------------ */
+    .u-glass-sm {
+        background: var(--glass-light);
+        backdrop-filter: var(--glass-blur-sm);
+    }
+
+    .u-glass-md {
+        background: var(--glass-medium);
+        backdrop-filter: var(--glass-blur-md);
+    }
+
+    .u-glass-lg {
+        background: var(--glass-heavy);
+        backdrop-filter: var(--glass-blur-lg);
+    }
+
+    .u-glass-xl {
+        background: var(--v-bg-glass);
+        backdrop-filter: var(--glass-blur-xl);
+    }
+
+    /* --------------------------------------------------------------
+     Border radius
+     ------------------------------------------------------------ */
+    .u-r-xs {
+        border-radius: var(--v-r-xs);
+    }
+
+    .u-r-sm {
+        border-radius: var(--v-r-sm);
+    }
+
+    .u-r-md {
+        border-radius: var(--v-r-md);
+    }
+
+    .u-r-lg {
+        border-radius: var(--v-r-lg);
+    }
+
+    .u-r-xl {
+        border-radius: var(--v-r-xl);
+    }
+
+    .u-r-pill {
+        border-radius: var(--v-r-pill);
+    }
+
+    /* --------------------------------------------------------------
+     Shadows (utility)
+     ------------------------------------------------------------ */
+    .u-shadow-sm {
+        box-shadow: var(--v-shadow-sm);
+    }
+
+    .u-shadow-md {
+        box-shadow: var(--v-shadow-md);
+    }
+
+    .u-shadow-lg {
+        box-shadow: var(--v-shadow-lg);
+    }
+
+    .u-shadow-accent {
+        box-shadow: var(--v-shadow-accent);
+    }
+}
+
+/*======================================================================
+ * 4️⃣  SIDEBAR – Holographic, expandable, TV‑ready (layer: sidebar)
+ *====================================================================*/
+@layer sidebar {
+
+    /* --------------------------------------------------------------
+     Core container – fixed to left edge
+     ------------------------------------------------------------ */
+    #main-sidebar {
+        position: fixed;
+        inset-block-start: 0;
+        inset-inline-start: 0;
+        block-size: 100%;
+        inline-size: var(--v-sidebar-closed);
+        background: rgba(8, 8, 8, .95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-inline-end: 1px solid rgba(var(--v-accent-rgb), .15);
+        z-index: var(--z-sidebar);
+        display: flex;
+        flex-direction: column;
+        isolation: isolate;
+        overflow: hidden;
+        transition:
+            inline-size var(--v-dur-mid) var(--v-ease-wow),
+            background var(--v-dur-mid) var(--v-ease-wow),
+            box-shadow var(--v-dur-mid) var(--v-ease-wow);
+        will-change: inline-size, background, box-shadow;
+    }
+
+    /* Gradient “holographic” background layer */
+    #main-sidebar::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(45deg,
+                rgba(var(--v-accent-rgb), .03) 0%,
+                rgba(var(--v-secondary-rgb), .02) 50%,
+                rgba(var(--v-accent-rgb), .01) 100%);
+        z-index: -1;
+    }
+
+    /* Expanded state – toggled via .is-expanded (JS) or :hover/:focus-within */
+    #main-sidebar:hover,
+    #main-sidebar:focus-within,
+    #main-sidebar.is-expanded {
+        inline-size: var(--v-sidebar-open);
+        background: rgba(5, 5, 8, .98);
+        box-shadow: 30px 0 60px rgba(0, 0, 0, .8);
+    }
+
+    /* --------------------------------------------------------------
+     Logo – “quantum” branding, expands with sidebar
+     ------------------------------------------------------------ */
+    .sidebar-logo {
+        inline-size: var(--v-sidebar-closed);
+        margin-inline: auto;
+        padding-block: 40px 30px;
+        font-family: var(--v-font-stack);
+        font-size: 1.8rem;
+        font-weight: var(--v-heading-weight);
+        line-height: 1;
+        letter-spacing: 8px;
+        text-align: center;
+        text-transform: uppercase;
+        background: linear-gradient(135deg, var(--v-accent), var(--v-secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: var(--v-accent);
+        transition:
+            inline-size var(--v-dur-mid) var(--v-ease-wow),
+            padding-inline-start var(--v-dur-mid) var(--v-ease-wow),
+            text-align var(--v-dur-mid) var(--v-ease-wow);
+    }
+
+    #main-sidebar:hover .sidebar-logo,
+    #main-sidebar.is-expanded .sidebar-logo {
+        inline-size: 100%;
+        padding-inline-start: 35px;
+        text-align: left;
+    }
+
+    /* --------------------------------------------------------------
+     Nav‑items container (scrollable)
+     ------------------------------------------------------------ */
+    .nav-items-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        overflow-y: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .nav-items-container::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/*======================================================================
+ * 5️⃣  NAV‑ITEMS – Interaction, focus, active, loading (layer: nav)
+ *====================================================================*/
+@layer nav {
+    .nav-item {
+        inline-size: 100%;
+        block-size: 70px;
+        display: flex;
+        align-items: center;
+        padding-inline-start: 33px;
+        gap: 12px;
+        background: transparent;
+        color: var(--v-text-muted);
+        cursor: pointer;
+        text-decoration: none;
+        position: relative;
+        border: 2px solid transparent;
+        border-radius: var(--v-r-sm);
+        transition:
+            color var(--v-dur-mid) var(--v-ease-wow),
+            background var(--v-dur-mid) var(--v-ease-wow),
+            transform var(--v-dur-mid) var(--v-ease-wow),
+            border-color var(--v-dur-fast) var(--v-ease-wow);
+        will-change: color, background, transform;
+    }
+
+    /* left‑accent indicator (empty when inactive) */
+    .nav-item::before {
+        content: "";
+        position: absolute;
+        inset-block-start: 50%;
+        inset-inline-start: 0;
+        transform: translateY(-50%);
+        inline-size: 4px;
+        block-size: 0;
+        background: var(--v-accent);
+        border-start-end-radius: var(--v-r-xs);
+        border-end-end-radius: var(--v-r-xs);
+        transition:
+            block-size var(--v-dur-mid) var(--v-ease-wow),
+            box-shadow var(--v-dur-mid) var(--v-ease-wow);
+    }
+
+    .nav-item i {
+        font-size: 24px;
+        min-inline-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: inherit;
+        transition:
+            color var(--v-dur-mid) var(--v-ease-wow),
+            transform var(--v-dur-mid) var(--v-ease-wow);
+    }
+
+    .nav-text {
+        margin-inline-start: 30px;
+        font-size: 13px;
+        font-weight: var(--v-bold-weight);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translateX(-10px);
+        transition:
+            opacity var(--v-dur-mid) var(--v-ease-wow),
+            transform var(--v-dur-mid) var(--v-ease-wow);
+    }
+
+    /* ----------------------------------------------------------------
+     Hover / Focus States
+     ---------------------------------------------------------------- */
+    #main-sidebar:hover .nav-text,
+    #main-sidebar:focus-within .nav-text,
+    #main-sidebar.is-expanded .nav-text {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .nav-item:hover,
+    .nav-item:focus-visible {
+        color: var(--v-text-head);
+        background: rgba(255, 255, 255, .04);
+        transform: translateX(4px);
+    }
+
+    .nav-item:hover i,
+    .nav-item:focus-visible i {
+        color: var(--v-accent);
+        transform: scale(1.1);
+    }
+
+    /* ----------------------------------------------------------------
+     Remote‑D‑PAD focus – JS adds .focused
+     ---------------------------------------------------------------- */
+    .nav-item.focused,
+    .nav-item:focus-visible {
+        color: var(--v-accent);
+        background: rgba(var(--v-accent-rgb), .08);
+        border: 2px solid var(--v-accent);
+        transform: scale(1.02);
+        outline: none;
+    }
+
+    /* ----------------------------------------------------------------
+     Active (current page)
+     ---------------------------------------------------------------- */
+    .nav-item.active {
+        color: var(--v-text-head);
+        background: rgba(255, 255, 255, .06);
+    }
+
+    .nav-item.active::before {
+        block-size: 28px;
+        box-shadow: 0 0 16px var(--v-accent-glow);
+    }
+
+    .nav-item.active i {
+        color: var(--v-accent);
+    }
+
+    /* ----------------------------------------------------------------
+     Loading state (spinner)
+     ---------------------------------------------------------------- */
+    .nav-item.loading {
+        opacity: .6;
+        pointer-events: none;
+    }
+
+    .nav-item.loading::after {
+        content: "";
+        position: absolute;
+        inset-inline-end: 20px;
+        inset-block-start: 50%;
+        transform: translateY(-50%);
+        inline-size: 16px;
+        block-size: 16px;
+        border: 2px solid transparent;
+        border-top-color: var(--v-accent);
+        border-radius: 50%;
+        animation: spin var(--v-dur-slow) linear infinite;
+    }
+
+    /* ----------------------------------------------------------------
+     Disabled state (ARIA‑disabled)
+     ---------------------------------------------------------------- */
+    .nav-item[aria-disabled="true"] {
+        color: var(--v-text-disabled);
+        pointer-events: none;
+        opacity: .5;
+    }
+}
+
+/*======================================================================
+ * 6️⃣  MAIN CONTENT – Adaptive layout & container queries (layer: content)
+ *====================================================================*/
+@layer content {
+    #main-content {
+        margin-inline-start: var(--v-sidebar-closed);
+        inline-size: calc(100% - var(--v-sidebar-closed));
+        block-size: 100%;
+        background: var(--v-bg-deep);
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: var(--v-content-pad);
+        display: flex;
+        flex-direction: column;
+        gap: var(--v-section-gap);
+        transition:
+            margin-inline-start var(--v-dur-mid) var(--v-ease-wow),
+            inline-size var(--v-dur-mid) var(--v-ease-wow);
+        will-change: margin-inline-start, inline-size;
+        container-type: inline-size;
+        /* container queries support */
+    }
+
+    /* Sidebar expanded – uses sibling selector */
+    #main-sidebar:hover~#main-content,
+    #main-sidebar:focus-within~#main-content,
+    #main-sidebar.is-expanded~#main-content {
+        margin-inline-start: var(--v-sidebar-open);
+        inline-size: calc(100% - var(--v-sidebar-open));
+    }
+
+    /* --------------------------------------------------------------
+     Container Queries – adaptive grid inside main content
+     ------------------------------------------------------------ */
+    @container (min-width: 500px) {
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--v-grid-gap);
+        }
+    }
+
+    @container (min-width: 800px) {
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--v-grid-gap);
+        }
+    }
+
+    @container (min-width: 1200px) {
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--v-grid-gap);
+        }
+    }
+}
+
+/*======================================================================
+ * 7️⃣  FOOTER – Minimal, TV‑safe (layer: footer)
+ *====================================================================*/
+@layer footer {
+    .sidebar-footer {
+        position: absolute;
+        inset-inline-start: 0;
+        inset-block-end: 30px;
+        inline-size: var(--v-sidebar-closed);
+        text-align: center;
+        font-size: 10px;
+        letter-spacing: 4px;
+        color: var(--v-text-muted);
+        opacity: .3;
+        transition:
+            inline-size var(--v-dur-mid) var(--v-ease-wow),
+            padding-inline-start var(--v-dur-mid) var(--v-ease-wow),
+            text-align var(--v-dur-mid) var(--v-ease-wow),
+            opacity var(--v-dur-mid) var(--v-ease-wow);
+    }
+
+    #main-sidebar:hover .sidebar-footer,
+    #main-sidebar.is-expanded .sidebar-footer {
+        inline-size: 100%;
+        text-align: left;
+        padding-inline-start: 35px;
+        opacity: .6;
+    }
+}
+
+/*======================================================================
+ * 8️⃣  STATE UTILITIES & INDICATORS (layer: state)
+ *====================================================================*/
+@layer state {
+
+    /* --------------------------------------------------------------
+     Global “loading” overlay (used by JS during async routes)
+     ------------------------------------------------------------ */
+    .global-loader {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, .7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: var(--z-loader);
+        opacity: 1;
+        visibility: visible;
+        transition:
+            opacity var(--v-dur-mid) var(--v-ease-wow),
+            visibility var(--v-dur-mid) var(--v-ease-wow);
+    }
+
+    .global-loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    /* --------------------------------------------------------------
+     Disabled / error states for generic components
+     ------------------------------------------------------------ */
+    .is-disabled {
+        opacity: .5;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    .has-error {
+        border: 2px solid var(--v-red);
+        background: rgba(var(--v-red-rgb, 255, 59, 48), .07);
+    }
+}
+
+/*======================================================================
+ * 9️⃣  ANIMATIONS & KEYFRAMES (layer: motion)
+ *====================================================================*/
+@layer motion {
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+            filter: brightness(1);
+        }
+
+        50% {
+            opacity: .7;
+            transform: scale(.97);
+            filter: brightness(1.2);
+        }
+    }
+
+    @keyframes holographicPulse {
+
+        0%,
+        100% {
+            opacity: .3;
+        }
+
+        50% {
+            opacity: .6;
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        to {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+    }
+}
+
+/*======================================================================
+ * 🔟  MEDIA QUERIES – Touch, Remote, 4K/8K, High‑Contrast, Reduced‑Motion
+ *====================================================================*/
+@layer responsive {
+
+    /* ----------------------------------------------------------------
+     Touch‑only remote (no hover) – larger tap‑targets
+     ---------------------------------------------------------------- */
+    @media (hover: none) {
+        #main-sidebar {
+            inline-size: var(--v-sidebar-open);
+        }
+
+        #main-content {
+            margin-inline-start: var(--v-sidebar-open);
+            inline-size: calc(100% - var(--v-sidebar-open));
+        }
+
+        .nav-text {
+            opacity: 1;
+            transform: none;
+        }
+
+        .nav-item {
+            block-size: 80px;
+            padding-inline-start: 33px;
+        }
+
+        .nav-item:active {
+            background: rgba(255, 255, 255, .1);
+            transform: scale(.98);
+        }
+
+        .sidebar-logo,
+        .sidebar-footer {
+            inline-size: 100%;
+            text-align: left;
+            padding-inline-start: 35px;
+        }
+    }
+
+    /* ----------------------------------------------------------------
+     4K TV (3840px+) – spacious UI, larger icons / fonts
+     ---------------------------------------------------------------- */
+    @media (min-width:3840px) {
+        #main-sidebar {
+            inline-size: 120px;
+        }
+
+        #main-sidebar:hover,
+        #main-sidebar.is-expanded {
+            inline-size: 360px;
+        }
+
+        .nav-item {
+            block-size: 100px;
+            padding-inline-start: 48px;
+        }
+
+        .nav-item i {
+            font-size: 32px;
+        }
+
+        .nav-text {
+            font-size: 16px;
+            margin-inline-start: 40px;
+        }
+
+        .sidebar-logo {
+            font-size: 2.4rem;
+            padding-block: 60px 40px;
+        }
+
+        #main-content {
+            --v-content-pad: 80px;
+        }
+
+        .profile-card {
+            padding: 60px;
+            gap: 60px;
+        }
+
+        .profile-avatar {
+            inline-size: 200px;
+            block-size: 200px;
+            font-size: 5rem;
+        }
+    }
+
+    /* ----------------------------------------------------------------
+     8K TV (7680px+) – ultra‑wide paddings
+     ---------------------------------------------------------------- */
+    @media (min-width:7680px) {
+        :root {
+            --v-content-pad: clamp(120px, 10vw, 240px);
+        }
+
+        #main-sidebar {
+            inline-size: 160px;
+        }
+
+        #main-sidebar:hover,
+        #main-sidebar.is-expanded {
+            inline-size: 460px;
+        }
+
+        .nav-item {
+            block-size: 120px;
+        }
+
+        .nav-item i {
+            font-size: 36px;
+        }
+
+        .nav-text {
+            font-size: 18px;
+        }
+    }
+
+    /* ----------------------------------------------------------------
+     High Contrast (prefers-contrast)
+     ---------------------------------------------------------------- */
+    @media (prefers-contrast: high) {
+        #main-sidebar {
+            background: #000;
+            border-inline-end: 2px solid var(--v-accent);
+        }
+
+        .nav-item {
+            color: #FFF;
+        }
+
+        .nav-item.active {
+            background: #1A1A1A;
+        }
+
+        .nav-item:focus-visible,
+        .nav-item.focused {
+            border-color: var(--v-accent);
+        }
+
+        .profile-card,
+        .account-action-btn {
+            border: 2px solid var(--v-accent);
+        }
+
+        .u-shadow-sm,
+        .u-shadow-md,
+        .u-shadow-lg {
+            box-shadow: none;
+        }
+    }
+
+    /* ----------------------------------------------------------------
+     Reduced Motion (prefers-reduced-motion)
+     ---------------------------------------------------------------- */
+    @media (prefers-reduced-motion: reduce) {
+
+        *,
+        *::before,
+        *::after {
+            animation-duration: .01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: .01ms !important;
+        }
+
+        .loader-logo,
+        .loader-spinner {
+            animation: none !important;
+        }
+    }
+}
+
+/*======================================================================
+ * 🛠  FALLBACKS & POLYFILLS (layer: fallback)
+ *====================================================================*/
+@layer fallback {
+
+    /* Backdrop‑filter fallback – solid dark background */
+    @supports not (backdrop-filter: blur(20px)) {
+        #main-sidebar {
+            background: #080808;
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+    }
+
+    /* Reduce transparency – user prefers less translucency */
+    @media (prefers-reduced-transparency: reduce) {
+        #main-sidebar {
+            backdrop-filter: none;
+            background: #080808;
+        }
+
+        .u-glass-sm,
+        .u-glass-md,
+        .u-glass-lg,
+        .u-glass-xl {
+            background: var(--v-bg-surface);
+        }
+    }
+
+    /* IE11 & ancient browsers – minimal functional fallback */
+    @media all and (-ms-high-contrast:none) {
+        .nav-item::before {
+            display: none;
+        }
+
+        .sidebar-logo,
+        .sidebar-footer {
+            width: 100% !important;
+        }
+    }
+}
+
+/*======================================================================
+ * END OF FILE – ~ 970 lines (including comments & whitespace)
+ *======================================================================*/
