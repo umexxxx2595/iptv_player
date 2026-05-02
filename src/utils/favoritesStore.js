@@ -52,7 +52,9 @@ export function addFavorite(channel = {}) {
         url: channel.url || '',
         logo: channel.logo || '',
         group: channel.group || channel.category || '',
-        category: channel.category || channel.group || ''
+        category: channel.category || channel.group || '',
+        description: channel.description || '',
+        mode: channel.mode || 'live'
     };
 
     saveFavorites([item, ...current]);
