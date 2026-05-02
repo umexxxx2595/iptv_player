@@ -1,0 +1,87 @@
+{
+  "name": "fonex-iptv-player",
+  "version": "2.5.0",
+  "description": "FONEX IPTV | Premium IPTV Experience for LG webOS TV",
+  "main": "src/bootstrap.js",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "build:webos": "vite build && node scripts/inline-webos-build.js && node scripts/prepare-webos-dist.js",
+    "webos:package": "ares-package dist -o ./packages",
+    "webos:install": "ares-install --device emulator packages/com.fonex.iptv.player_2.5.0_all.ipk",
+    "webos:launch": "ares-launch --device emulator com.fonex.iptv.player",
+    "webos:inspect": "ares-inspect --device emulator com.fonex.iptv.player",
+    "webos:deploy": "deploy-webos.bat",
+    "webos:debug": "deploy-webos.bat && ares-inspect --device emulator com.fonex.iptv.player",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src/ --ext .js,.html",
+    "lint:fix": "eslint src/ --ext .js,.html --fix",
+    "format": "prettier --write \"src/**/*.{js,html,css,json}\"",
+    "format:check": "prettier --check \"src/**/*.{js,html,css,json}\"",
+    "clean": "rimraf dist packages *.ipk",
+    "clean:all": "rimraf dist packages node_modules *.ipk",
+    "version:sync": "node scripts/sync-version.js",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "iptv",
+    "webos",
+    "lg-tv",
+    "streaming",
+    "video-player",
+    "hls",
+    "epg",
+    "m3u",
+    "smart-tv",
+    "webos-tv",
+    "premium",
+    "cinema"
+  ],
+  "author": "FONEX Labs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fonex-labs/iptv-player.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fonex-labs/iptv-player/issues",
+    "email": "support@fonexlabs.com"
+  },
+  "homepage": "https://github.com/fonex-labs/iptv-player#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "dependencies": {
+    "hls.js": "^1.5.7"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "autoprefixer": "^10.4.17",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-html": "^7.1.0",
+    "husky": "^9.0.10",
+    "postcss": "^8.4.35",
+    "prettier": "^3.2.5",
+    "rimraf": "^5.0.5",
+    "vite": "^5.1.4",
+
+    "vitest": "^1.3.1",
+    "@vitest/coverage-v8": "^1.3.1"
+  },
+  "optionalDependencies": {
+    "@ares-cli/ares": "^1.12.0"
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "webOS TV >= 4.0"
+  ],
+  "volta": {
+    "node": "20.11.0",
+    "npm": "10.2.4"
+  }
+}

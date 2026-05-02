@@ -1,0 +1,34 @@
+{
+    "id": "com.fonex.iptv.player",
+    "version": "2.5.0",
+    "vendor": "FONEX Labs",
+    "type": "web",
+    "main": "index.html",
+    "title": "FONEX IPTV",
+    "icon": "public/assets/icons/icon.png",
+    "largeIcon": "public/assets/icons/largeIcon.png",
+    "splashBackground": "public/assets/backgrounds/splash.png",
+    "resolution": "1920x1080",
+    "iconColor": "#0f0f1a",
+    "requiredMemory": 512,
+    "disableBackHistoryAPI": true,
+    "handlesRelaunch": true,
+    "enablePigScreenSaver": false,
+    "screenSaverProperties": {
+        "preferredType": 3
+    },
+    "useGalleryMode": true,
+    "accessibility": {
+        "supportsAudioGuidance": true
+    },
+    "supportTouchMode": "virtual",
+    "virtualTouch": {
+        "verticalThreshold": 20,
+        "horizontalThreshold": 50,
+        "positionEventOnPress": true,
+        "shortTouchThreshold": 30
+    },
+    "thirdPartyCookiesPolicy": "allow",
+    "useUnlimitedMediaPolicy": true,
+    "appDescription": "FONEX Cinema - Premium IPTV Experience for LG webOS."
+}

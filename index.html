@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+
+<head>
+    <!-- ──────────────────────────────────────────────────────────────────────
+         FONEX IPTV - Main Entry Point
+         Platform: LG webOS TV (2024-2026)
+         Version: 3.1.0
+         Author: FONEX Labs
+         ────────────────────────────────────────────────────────────────────── -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#050508">
+    <meta name="webos-TV" content="true">
+    <meta name="webos-overscan" content="safe-area">
+
+    <!-- PWA MANIFEST -->
+    <link rel="manifest" href="./public/manifest.json">
+    <link rel="icon" type="image/png" href="./public/assets/icons/icon.png">
+
+    <!-- PRECONNECT -->
+    <!-- Local Assets Priority -->
+
+    <!-- CSP (Development / IPTV Stream Friendly) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' file: data: blob: https: http:; script-src 'self' file: 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' file: 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' file: data: blob: https: http:; font-src 'self' file: data: https://fonts.gstatic.com; media-src 'self' file: data: blob: https: http:; connect-src 'self' file: data: blob: https: http: ws: wss:;">
+
+    <title>FONEX IPTV | Sovereign Edition</title>
+
+    <!-- 1. CRITICAL CSS (Loader & App Shell Visibility) -->
+    <link rel="stylesheet" href="./styles/critical.css?v=3.1.0">
+
+    <!-- 2. DESIGN SYSTEM & TOKENS -->
+    <link rel="stylesheet" href="./styles/base.css?v=3.1.0">
+    <link rel="stylesheet" href="./styles/fonex-theme.css?v=3.1.0">
+
+    <!-- 3. PREMIUM EFFECTS & UI -->
+    <link rel="stylesheet" href="./styles/glassmorphism.css?v=3.1.0">
+    <link rel="stylesheet" href="./styles/components.css?v=3.1.0">
+    <link rel="stylesheet" href="./styles/settings.css?v=3.1.0">
+
+    <!-- 4. MOTION & RESPONSIVE ADAPTATION -->
+    <link rel="stylesheet" href="./styles/motion.css?v=3.1.0">
+    <link rel="stylesheet" href="./styles/responsive.css?v=3.1.0">
+
+    <!-- LIBRARIES (Local Vendor First) -->
+    <script src="./public/vendor/webOSTV.js"></script>
+    <script src="./public/vendor/hls.min.js"></script>
+    <script src="./public/vendor/lucide.min.js"></script>
+    <script>
+        // Lucide Fallback
+        window.lucide = window.lucide || {
+            createIcons: function () { console.warn('[FONEX] Lucide fallback used.'); },
+            icons: {}
+        };
+    </script>
+</head>
+
+<body>
+    <!-- APP LOADER -->
+    <div id="app-loader" role="status" aria-label="Uygulama yükleniyor">
+        <div class="loader-logo">FONEX</div>
+        <div class="loader-spinner"></div>
+        <div class="loader-text" id="boot-status">BAŞLATILIYOR...</div>
+        <div class="loader-version">v3.1.0</div>
+        <div class="loader-progress">
+            <div class="loader-progress-bar" id="boot-progress"></div>
+        </div>
+    </div>
+
+    <!-- APP SHELL -->
+    <div id="app-shell" aria-hidden="true">
+        <nav id="main-sidebar" aria-label="Ana menü"></nav>
+        <main id="main-content" role="main"></main>
+        <div id="toast-container" aria-live="polite"></div>
+        <div id="modal-overlay" class="glass-overlay" aria-hidden="true"></div>
+        <div id="player-overlay" aria-hidden="true"></div>
+    </div>
+
+    <!-- ERROR BOUNDARY -->
+    <div id="error-boundary" hidden>
+        <div class="error-content">
+            <h1>⚠️ Beklenmeyen Hata</h1>
+            <p id="error-message"></p>
+            <button onclick="location.reload()" class="error-retry-btn focusable" autofocus>Yeniden Başlat</button>
+        </div>
+    </div>
+
+    <!-- BOOT WATCHDOG (Recovery Mode) -->
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('app-loader');
+                const shell = document.getElementById('app-shell');
+                const status = document.getElementById('boot-status');
+
+                const shellReady = shell?.classList.contains('ready');
+                const bootFailed = document.documentElement.classList.contains('boot-failed');
+
+                if (!shellReady && !bootFailed) {
+                    console.warn('[FONEX] Boot watchdog triggered: app-shell was not marked ready.');
+
+                    if (status) {
+                        status.textContent = 'BAŞLATMA TAKILDI - KURTARMA MODU';
+                    }
+
+                    if (shell) {
+                        shell.removeAttribute('aria-hidden');
+                        shell.classList.add('ready', 'visible');
+                    }
+
+                    if (loader) {
+                        loader.classList.add('hidden');
+                        loader.setAttribute('aria-hidden', 'true');
+                    }
+
+                    document.documentElement.classList.add('app-ready', 'boot-watchdog-recovered');
+                    document.body.classList.add('app-ready');
+                }
+            }, 8000);
+        });
+    </script>
+
+    <!-- GLOBAL ERROR HANDLER & PLATFORM DETECTION -->
+    <script>
+        window.onerror = function (msg, url, line, col, error) {
+            const text = String(msg || '');
+
+            console.error('[GLOBAL ERROR]', {
+                msg: text,
+                url,
+                line,
+                col,
+                error
+            });
+
+            if (text.includes('Critical') || text.includes('Fatal')) {
+                document.documentElement.classList.add('boot-failed');
+
+                const boundary = document.getElementById('error-boundary');
+                const message = document.getElementById('error-message');
+
+                if (boundary && message) {
+                    boundary.hidden = false;
+                    message.textContent = text;
+                }
+            }
+
+            return false;
+        };
+
+        if (navigator.userAgent.includes('webOS')) {
+            document.documentElement.classList.add('webos-tv');
+        }
+    </script>
+
+    <!-- BOOT ORCHESTRATOR -->
+    <script type="module">
+        import { bootSequence } from './src/boot-loader.js';
+        const startBoot = () => {
+            console.log('[Orchestrator] Starting Boot Sequence...');
+            bootSequence().catch(err => {
+                console.error('[Orchestrator] Boot Sequence Failed:', err);
+                window.onerror('Fatal: ' + (err.message || 'Başlatma hatası'));
+            });
+        };
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startBoot, { once: true });
+        else startBoot();
+    </script>
+</body>
+
+</html>
