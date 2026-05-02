@@ -1,0 +1,22 @@
+{
+  "name": "fonex-iptv-player",
+  "version": "3.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A focused IPTV player baseline for LG webOS TV and modern browsers.",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "build": "vite build",
+    "build:webos": "vite build && node scripts/inline-webos-build.js && node scripts/prepare-webos-dist.js",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "vite": "^5.4.19",
+    "vitest": "^2.1.9"
+  }
+}
