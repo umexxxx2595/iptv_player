@@ -2,6 +2,7 @@ import Hls from 'hls.js';
 
 import { addRecentChannel } from '../../data/catalogStore.js';
 import { isFavorite, toggleFavorite } from '../../utils/favoritesStore.js';
+import { sanitizeHTML } from '../../utils/sanitize.js';
 
 const destroyVideoPlayback = (playerOverlay) => {
     if (!playerOverlay) {
@@ -84,6 +85,9 @@ export const renderPlayerScreen = async (channel = {}, context = {}) => {
     const hasPrevious = currentIndex > 0;
     const hasNext = Array.isArray(context.channelList) && currentIndex < context.channelList.length - 1;
     const favoriteLabel = isFavorite(safeChannel) ? 'Favoriden cikar' : 'Favoriye ekle';
+    const safeChannelName = sanitizeHTML(safeChannel.name);
+    const safeCategory = sanitizeHTML(safeChannel.category);
+    const safeListSize = sanitizeHTML(String(context.channelList?.length || 0));
 
     playerOverlay.classList.add('active');
     playerOverlay.setAttribute('aria-hidden', 'false');
@@ -91,11 +95,11 @@ export const renderPlayerScreen = async (channel = {}, context = {}) => {
         <section class="player-screen">
             <header class="player-header-bar">
                 <div class="screen-header">
-                    <h1>${safeChannel.name}</h1>
-                    <p>${safeChannel.category} | Liste boyutu: ${context.channelList?.length || 0}</p>
+                    <h1>${safeChannelName}</h1>
+                    <p>${safeCategory} | Liste boyutu: ${safeListSize}</p>
                 </div>
                 <div class="player-actions">
-                    <button type="button" class="focusable action-pill" data-player-action="toggle-favorite">${favoriteLabel}</button>
+                    <button type="button" class="focusable action-pill" data-player-action="toggle-favorite">${sanitizeHTML(favoriteLabel)}</button>
                     <button type="button" class="focusable action-pill" data-close-player="true">Kapat</button>
                 </div>
             </header>
@@ -104,7 +108,7 @@ export const renderPlayerScreen = async (channel = {}, context = {}) => {
                 controls
                 autoplay
                 playsinline
-                aria-label="${safeChannel.name}"
+                aria-label="${safeChannelName}"
             ></video>
             <div class="player-control-row">
                 <button type="button" class="focusable action-pill" data-player-nav="prev" ${hasPrevious ? '' : 'disabled'}>Onceki</button>
