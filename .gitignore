@@ -1,0 +1,7 @@
+node_modules
+dist
+packages
+*.ipk
+.DS_Store
+npm-debug.log*
+coverage
