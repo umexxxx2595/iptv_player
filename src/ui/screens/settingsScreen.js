@@ -1,5 +1,6 @@
 import { AppConfig } from '../../app.js';
 import { getPlaylistState, getRecentItems } from '../../data/catalogStore.js';
+import { sanitizeHTML } from '../../utils/sanitize.js';
 import { createTagMarkup, renderContent } from './screenHelpers.js';
 
 export const renderSettingsScreen = async () => {
@@ -9,6 +10,7 @@ export const renderSettingsScreen = async () => {
     const sourceDate = playlistState.importedAt
         ? new Date(playlistState.importedAt).toLocaleString('tr-TR')
         : 'Demo katalog';
+    const safeSourceUrl = sanitizeHTML(playlistState.sourceUrl || '');
 
     return renderContent(`
         <section class="screen-view screen-settings">
@@ -35,7 +37,7 @@ export const renderSettingsScreen = async () => {
                         type="url"
                         name="playlist-url"
                         placeholder="https://ornek.com/list.m3u"
-                        value="${playlistState.sourceUrl || ''}"
+                        value="${safeSourceUrl}"
                     />
                     <button type="submit" class="focusable action-pill action-pill-primary">URL'den yukle</button>
                 </form>
@@ -51,7 +53,7 @@ export const renderSettingsScreen = async () => {
                         rows="8"
                         placeholder="#EXTM3U&#10;#EXTINF:-1 group-title=&quot;Spor&quot;,Spor Kanal&#10;https://ornek.com/canli.m3u8"
                     ></textarea>
-                    <input class="focusable text-input" type="text" name="playlist-label" placeholder="Kaynak etiketi" />
+                    <input class="focusable text-input" type="text" name="playlist-label" placeholder="Kaynak etiketi" value="${sanitizeHTML(playlistState.sourceLabel || '')}" />
                     <button type="submit" class="focusable action-pill">Metni ice aktar</button>
                 </form>
             </section>
