@@ -151,7 +151,12 @@ const writeState = (nextState) => {
             : []
     };
 
-    localStorage.setItem(PLAYLIST_STATE_KEY, JSON.stringify(safeState));
+    try {
+        localStorage.setItem(PLAYLIST_STATE_KEY, JSON.stringify(safeState));
+    } catch (error) {
+        console.warn('[CatalogStore] Playlist state kaydedilemedi:', error);
+    }
+
     window.dispatchEvent(new CustomEvent('fonex:playlist:changed', {
         detail: {
             count: safeState.items.length,
