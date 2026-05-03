@@ -1,0 +1,20 @@
+{
+  "name": "FONEX IPTV",
+  "short_name": "FONEX",
+  "start_url": "../dist/index.html",
+  "display": "standalone",
+  "background_color": "#050508",
+  "theme_color": "#050508",
+  "icons": [
+    {
+      "src": "../../public/assets/icons/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../../public/assets/icons/largeIcon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
