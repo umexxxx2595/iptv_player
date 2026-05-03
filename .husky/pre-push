@@ -1,22 +1,26 @@
 #!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
 
-SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
-PROJECT_ROOT="$(CDPATH='' cd -- "$SCRIPT_DIR/.." && pwd)"
-export PROJECT_ROOT
-. "$SCRIPT_DIR/_/common.sh"
+# Pre-push: Doğrulama kontrolü ve ileri seviye test
 
-print_step "validating project structure..."
+REQUIRED_FILES="index.html package.json src/app.js src/bootstrap.js src/boot-loader.js"
+for f in $REQUIRED_FILES; do
+  if [ ! -f "$f" ]; then
+    echo "⛔ Zorunlu dosya eksik: $f"
+    exit 1
+  fi
+done
 
-check_required_files \
-    "$PROJECT_ROOT/index.html" \
-    "$PROJECT_ROOT/package.json" \
-    "$PROJECT_ROOT/src/app.js" \
-    "$PROJECT_ROOT/src/bootstrap.js" \
-    "$PROJECT_ROOT/src/boot-loader.js" \
-    "$PROJECT_ROOT/tests/integration.test.js"
+if npx --no-install lint-staged; then
+  echo "✅ Kod biçimi ve lint kontrolleri push öncesi geçti."
+else
+  echo "⛔ Push öncesi lint/format hatası! Push iptal edildi."
+  exit 1
+fi
 
-print_step "running pre-push syntax checks..."
-
-run_core_syntax_checks
-
-print_step "pre-push validation passed."
+if npm run test; then
+  echo "✅ Push öncesi tüm testler geçti."
+else
+  echo "⛔ Testler başarısız! Push iptal edildi."
+  exit 1
+fi
