@@ -1,13 +1,19 @@
 #!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
 
-SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
-PROJECT_ROOT="$(CDPATH='' cd -- "$SCRIPT_DIR/.." && pwd)"
-export PROJECT_ROOT
-. "$SCRIPT_DIR/_/common.sh"
+# Pre-commit: Lint & format kontrolü ve test
 
-print_step "running pre-commit checks..."
+if npx --no-install lint-staged; then
+  echo "✅ Kod biçimi ve lint kontrolleri geçti."
+else
+  echo "⛔ Lint veya format hatası tespit edildi. Commit iptal edildi."
+  exit 1
+fi
 
-run_core_syntax_checks
-check_js_syntax "$PROJECT_ROOT/tests/integration.test.js"
-
-print_step "pre-commit checks passed."
+# Testleri otomatik çalıştırmak için (isteğe bağlı, kapatmak için yoruma alabilirsiniz)
+if npm run test; then
+  echo "✅ Tüm testler geçti."
+else
+  echo "⛔ Testler başarısız! Commit iptal edildi."
+  exit 1
+fi
