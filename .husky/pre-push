@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
+PROJECT_ROOT="$(CDPATH='' cd -- "$SCRIPT_DIR/.." && pwd)"
+export PROJECT_ROOT
+. "$SCRIPT_DIR/_/common.sh"
+
+print_step "validating project structure..."
+
+check_required_files \
+    "$PROJECT_ROOT/index.html" \
+    "$PROJECT_ROOT/package.json" \
+    "$PROJECT_ROOT/src/app.js" \
+    "$PROJECT_ROOT/src/bootstrap.js" \
+    "$PROJECT_ROOT/src/boot-loader.js" \
+    "$PROJECT_ROOT/tests/integration.test.js"
+
+print_step "running pre-push syntax checks..."
+
+run_core_syntax_checks
+
+print_step "pre-push validation passed."
