@@ -1,12 +1,10 @@
 #!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
 
-SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
-PROJECT_ROOT="$(CDPATH='' cd -- "$SCRIPT_DIR/.." && pwd)"
-export PROJECT_ROOT
-. "$SCRIPT_DIR/_/common.sh"
-
-print_step "validating commit message..."
-
-validate_commit_message "$1"
-
-print_step "commit message validation passed."
+# Commit mesaj standardı kontrolü (Conventional Commits)
+if npx --no-install commitlint --edit "$1"; then
+  echo "✅ Commit mesajı doğrulandı."
+else
+  echo "⛔ Commit mesajı geçersiz! Conventional Commits standardına uymalısınız."
+  exit 1
+fi
