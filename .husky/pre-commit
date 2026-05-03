@@ -1,4 +1,13 @@
-#!/bin/sh
-npm run lint:fix
-npm run format
-npm run test
+#!/usr/bin/env sh
+
+SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
+PROJECT_ROOT="$(CDPATH='' cd -- "$SCRIPT_DIR/.." && pwd)"
+export PROJECT_ROOT
+. "$SCRIPT_DIR/_/common.sh"
+
+print_step "running pre-commit checks..."
+
+run_core_syntax_checks
+check_js_syntax "$PROJECT_ROOT/tests/integration.test.js"
+
+print_step "pre-commit checks passed."
