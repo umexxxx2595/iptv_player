@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
+PROJECT_ROOT="$(CDPATH='' cd -- "$SCRIPT_DIR/.." && pwd)"
+export PROJECT_ROOT
+. "$SCRIPT_DIR/_/common.sh"
+
+print_step "validating commit message..."
+
+validate_commit_message "$1"
+
+print_step "commit message validation passed."
